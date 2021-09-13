@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,500,700" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
+    crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
+    crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+  </head>
+  <body>
+ 
+
+   <div id="app">
+       <div class="continer">
+<div class="row">
+    
+    <div class="col-md-8">
+        <table name="cart" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th colspan="2">id</th>
+                    <th>name</th>
+                    <th colspan="2">Quantity</th>
+                    <th>Price</th>
+                    <th>Item Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="pro in products" :key="pro.id">
+                    <td><button @click="removecart" class="btn btn-danger btn-sm">x</button></td>
+                    <td name="sajid">{{pro.id  }}</td>
+                    <td>{{pro.name  }}</td>
+                    <td>{{pro.qty  }}</td>
+                    <td>
+                    
+                        <button @click="addQty(pro)" class="btn btn-success btn-sm" >+</button>
+                        
+                        <button @click="removeQty(pro)" class="btn btn-danger btn-sm" >-</button>
+                    </td>
+                    <td>${{pro.price }}</td>
+                    <td>${{itemtotal(pro)  }}</td>
+                    <tr>
+                        <td colspan="6">Total</td>
+                    <td>${{subtotal}}</td>
+                    </tr>
+                   
+                    <tr>
+                        <td colspan="6">Total</td>
+                    <td>${{totalprice }}</td>
+                    </tr>
+                    
+                    </tr>
+
+            </tbody>
+            </table>
+
+    </div>
+    <div class="col-md-4">
+        <form>
+            <div class="form-grup">
+            <label for="">Item Id</label>
+            <input type="text" class="form-control" v-model="product.id">
+        </div>
+
+                <div class="form-grup">
+                <label for="">Item Name</label>
+                <input type="text" class="form-control" v-model="product.name">
+            </div>
+            
+                    <div class="form-grup">
+                    <label for="">Quantity</label>
+                    <input type="text" class="form-control" v-model="product.qty">
+                </div>
+               
+                        <div class="form-grup">
+                        <label for="">Item Price</label>
+                        <input type="text" class="form-control" v-model="product.price">
+                    </div>
+                    <div class="form-grup">
+                        <label for="">Item Price</label>
+                        <input type="text" class="form-control" v-model="product.tax">
+                    </div>
+                    
+                    <br>
+                    <button @click.prevent="addtocart" class="btn btn-primary">Save Item</button>
+        </form>
+    </div>
+    </div>
+</div>
+
+        </div>
+
+<!--vuejs-->
+<script>
+    var app = new Vue({
+        el: "#app",
+        data: {
+
+            products:[
+                    
+                    ],
+                    product:{
+                        id:'',
+                        name:'',
+                        qty:'',
+                        price:'',
+                        tax:'',
+                    },
+            
+        },
+   computed:{
+       subtotal: function() {
+           return this.products.reduce((total,item) => { 
+               return total + item.qty * item.price
+           },.00)
+           
+       },
+     
+totalprice: function(){
+    return  this.product.tax + this.subtotal  
+   }
+
+   },
+    methods: {
+        addtocart: function(){
+      
+        var id = this.product.id
+        var name =this.product.name
+        var qty = this.product.qty
+        var price = this.product.price
+        
+        this.products.push({id: id, name: name, qty:qty, price: price,})
+        this.clearcart()
+        
+},
+
+removecart:function(item){
+    var del = this.products.indexOf(item)
+    this.products.splice(del, 1)
+},
+addQty:function(item){
+   Object.assign(item, {
+       qty: parseInt(item.qty) + 1
+   })
+},
+removeQty: function(item){
+    Object.assign(item, {
+       qty: parseInt(item.qty) - 1
+   })
+},
+itemtotal: function(item){
+return item.qty * item.price
+},
+clearcart: function(){
+    this.product.id = ''
+
+},
+
+}
+    
+    });
+    </script>
+    
+    <!--vuejs end-->
+    
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  </body>
+</html>
+  
+        
+     
+
